@@ -52,7 +52,7 @@ trait PubTrait
 
 		$request = CtxRequest::getInstance()->request;
 		$this->Model->signInLog([
-			'uid' => $data['id'],
+			'admid' => $data['id'],
 			'name' => $data['realname'] ?: $data['username'],
 			'ip' => ip($request),
 		]);

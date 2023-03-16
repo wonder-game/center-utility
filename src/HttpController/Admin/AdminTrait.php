@@ -36,14 +36,13 @@ trait AdminTrait
      * @param bool $gp game & package 是否查询游戏与包的数据
      * @return array
      */
-    public function _getUserInfo($return = false, $gp = true)
+    public function _getUserInfo($return = false)
     {
-        $config = [
-            // 充值枚举
-            'pay' => config('pay')
-        ];
 
-        $config['sysinfo'] = sysinfo();
+        $config = [
+            'sysinfo' => sysinfo(),
+            'subSystem' => config('SUB_SYSTEM')
+        ];
 
         // 客户端进入页,应存id
         if ( ! empty($this->operinfo['extension']['homePath'])) {
