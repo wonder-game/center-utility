@@ -1,9 +1,9 @@
 <?php
 
 
-namespace WonderGame\EsUtility\Model\Admin;
+namespace WonderGame\CenterUtility\Model\Admin;
 
-use WonderGame\EsUtility\Common\OrmCache\Hash;
+use WonderGame\CenterUtility\Common\OrmCache\Hash;
 
 trait CrontabTrait
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace WonderGame\EsUtility\Consumer;
+namespace WonderGame\CenterUtility\Consumer;
 
 trait HttpTrackerTrait
 {

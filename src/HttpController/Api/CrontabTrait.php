@@ -1,6 +1,6 @@
 <?php
 
-namespace WonderGame\EsUtility\HttpController\Api;
+namespace WonderGame\CenterUtility\HttpController\Api;
 
 trait CrontabTrait
 {

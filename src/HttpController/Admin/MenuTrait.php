@@ -1,11 +1,11 @@
 <?php
 
 
-namespace WonderGame\EsUtility\HttpController\Admin;
+namespace WonderGame\CenterUtility\HttpController\Admin;
 
-use WonderGame\EsUtility\Common\Exception\HttpParamException;
-use WonderGame\EsUtility\Common\Http\Code;
-use WonderGame\EsUtility\Common\Languages\Dictionary;
+use WonderGame\CenterUtility\Common\Exception\HttpParamException;
+use WonderGame\CenterUtility\Common\Http\Code;
+use WonderGame\CenterUtility\Common\Languages\Dictionary;
 
 /**
  * Class Menu

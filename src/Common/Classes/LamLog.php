@@ -6,7 +6,7 @@
  * @version 1.0.4 最后修改时间 2020年11月22日
  */
 
-namespace WonderGame\EsUtility\Common\Classes;
+namespace WonderGame\CenterUtility\Common\Classes;
 
 use EasySwoole\Log\LoggerInterface;
 use Swoole\Coroutine;

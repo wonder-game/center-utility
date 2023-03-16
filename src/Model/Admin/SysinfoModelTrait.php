@@ -1,8 +1,8 @@
 <?php
 
-namespace WonderGame\EsUtility\Model\Admin;
+namespace WonderGame\CenterUtility\Model\Admin;
 
-use WonderGame\EsUtility\Common\OrmCache\SplArray;
+use WonderGame\CenterUtility\Common\OrmCache\SplArray;
 
 trait SysinfoModelTrait
 {

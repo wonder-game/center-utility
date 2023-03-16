@@ -1,8 +1,8 @@
 <?php
 
-namespace WonderGame\EsUtility\HttpController\Admin;
+namespace WonderGame\CenterUtility\HttpController\Admin;
 
-use WonderGame\EsUtility\Common\Exception\HttpParamException;
+use WonderGame\CenterUtility\Common\Exception\HttpParamException;
 
 /**
  * @property \App\Model\Admin\Sysinfo $Model

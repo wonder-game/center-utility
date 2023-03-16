@@ -1,6 +1,6 @@
 <?php
 
-namespace WonderGame\EsUtility\HttpController\Admin;
+namespace WonderGame\CenterUtility\HttpController\Admin;
 
 trait LogLoginTrait
 {

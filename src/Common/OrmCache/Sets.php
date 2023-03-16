@@ -1,6 +1,6 @@
 <?php
 
-namespace WonderGame\EsUtility\Common\OrmCache;
+namespace WonderGame\CenterUtility\Common\OrmCache;
 
 use EasySwoole\Redis\Redis;
 use EasySwoole\RedisPool\RedisPool;

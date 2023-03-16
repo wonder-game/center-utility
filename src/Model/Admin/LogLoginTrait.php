@@ -1,7 +1,7 @@
 <?php
 
 
-namespace WonderGame\EsUtility\Model\Admin;
+namespace WonderGame\CenterUtility\Model\Admin;
 
 
 use EasySwoole\Mysqli\QueryBuilder;

@@ -1,10 +1,10 @@
 <?php
 
-namespace WonderGame\EsUtility\HttpController\Admin;
+namespace WonderGame\CenterUtility\HttpController\Admin;
 
 use EasySwoole\ORM\AbstractModel;
-use WonderGame\EsUtility\Common\Exception\HttpParamException;
-use WonderGame\EsUtility\Common\Languages\Dictionary;
+use WonderGame\CenterUtility\Common\Exception\HttpParamException;
+use WonderGame\CenterUtility\Common\Languages\Dictionary;
 
 /**
  * @property \App\Model\Admin\Admin $Model

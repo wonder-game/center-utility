@@ -65,7 +65,7 @@
 Controller
 ```php
 <?php
-use WonderGame\EsUtility\HttpController\Admin\AdminTrait;
+use WonderGame\CenterUtility\HttpController\Admin\AdminTrait;
 
 class MyAdminController
 {
@@ -78,7 +78,7 @@ class MyAdminController
 Model
 ```php
 <?php
-use WonderGame\EsUtility\Model\AdminModelTrait;
+use WonderGame\CenterUtility\Model\AdminModelTrait;
 
 class MyAdminModel
 {

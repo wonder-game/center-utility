@@ -1,6 +1,6 @@
 <?php
 
-namespace WonderGame\EsUtility\Common\Classes;
+namespace WonderGame\CenterUtility\Common\Classes;
 
 use EasySwoole\ORM\AbstractModel;
 use EasySwoole\Spl\SplBean;

@@ -4,7 +4,7 @@ namespace Tests\Common\Mysqli;
 
 use EasySwoole\Mysqli\QueryBuilder;
 use PHPUnit\Framework\TestCase;
-use WonderGame\EsUtility\Common\Classes\Mysqli;
+use WonderGame\CenterUtility\Common\Classes\Mysqli;
 
 /**
  * php easyswoole phpunit tests/Common/Mysqli/Fetch.php

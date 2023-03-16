@@ -1,8 +1,8 @@
 <?php
 
-namespace WonderGame\EsUtility\HttpController\Api;
+namespace WonderGame\CenterUtility\HttpController\Api;
 
-use WonderGame\EsUtility\Common\Classes\LamOpenssl;
+use WonderGame\CenterUtility\Common\Classes\LamOpenssl;
 
 trait BaseTrait
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace WonderGame\EsUtility;
+namespace WonderGame\CenterUtility;
 
 use EasySwoole\Component\Di;
 use EasySwoole\EasySwoole\Config;
@@ -11,10 +11,10 @@ use EasySwoole\I18N\I18N;
 use EasySwoole\ORM\DbManager;
 use EasySwoole\Spl\SplBean;
 use EasySwoole\Trigger\TriggerInterface;
-use WonderGame\EsUtility\Common\Classes\CtxRequest;
-use WonderGame\EsUtility\Common\Classes\ExceptionTrigger;
-use WonderGame\EsUtility\Common\Classes\LamUnit;
-use WonderGame\EsUtility\HttpTracker\Index as HttpTracker;
+use WonderGame\CenterUtility\Common\Classes\CtxRequest;
+use WonderGame\CenterUtility\Common\Classes\ExceptionTrigger;
+use WonderGame\CenterUtility\Common\Classes\LamUnit;
+use WonderGame\CenterUtility\HttpTracker\Index as HttpTracker;
 
 class EventInitialize extends SplBean
 {
@@ -231,8 +231,8 @@ class EventInitialize extends SplBean
                 if (is_callable($this->mysqlOnQueryFunc['_save_sql'])) {
                     $this->mysqlOnQueryFunc['_save_sql']($sql);
                 } else {
-                    /** @var \App\Model\Admin\LogSql $Log */
-                    $Log = model_admin('LogSql');
+                    /** @var \App\Model\LogSql $Log */
+                    $Log = model('LogSql');
                     $Log->sqlWriteLog($sql);
                 }
 

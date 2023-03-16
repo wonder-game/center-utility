@@ -1,5 +1,5 @@
 <?php
-namespace WonderGame\EsUtility;
+namespace WonderGame\CenterUtility;
 
 use EasySwoole\Command\Color;
 use EasySwoole\EasySwoole\Command\Utility;

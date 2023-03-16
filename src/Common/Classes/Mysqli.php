@@ -1,7 +1,7 @@
 <?php
 
 
-namespace WonderGame\EsUtility\Common\Classes;
+namespace WonderGame\CenterUtility\Common\Classes;
 
 use EasySwoole\Mysqli\Client;
 use EasySwoole\Mysqli\Config;

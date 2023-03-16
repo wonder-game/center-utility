@@ -31,7 +31,7 @@
     },
     "autoload": {
         "psr-4": {
-            "WonderGame\\EsUtility\\": "src",
+            "WonderGame\\CenterUtility\\": "src",
             "Tests\\": "tests/"
         }
     },

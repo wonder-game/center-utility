@@ -1,6 +1,6 @@
 <?php
 
-namespace WonderGame\EsUtility\HttpTracker;
+namespace WonderGame\CenterUtility\HttpTracker;
 
 use EasySwoole\Redis\Redis;
 use EasySwoole\RedisPool\RedisPool;
@@ -13,12 +13,12 @@ class SaveHandler implements SaveHandlerInterface
 		'queue' => 'Report-Tracker',
 		'redis-name' => 'report',
 	];
-	
+
 	public function __construct(array $cfg = [])
 	{
 		$cfg && $this->config = array_merge($this->config, $cfg);
 	}
-	
+
 	/**
 	 * @param Point|null $point
 	 * @param array|null $globalArg

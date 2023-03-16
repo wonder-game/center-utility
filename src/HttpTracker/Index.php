@@ -1,6 +1,6 @@
 <?php
 
-namespace WonderGame\EsUtility\HttpTracker;
+namespace WonderGame\CenterUtility\HttpTracker;
 
 use EasySwoole\Http\Request;
 use EasySwoole\Http\Response;

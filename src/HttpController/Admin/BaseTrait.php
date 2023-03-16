@@ -1,12 +1,12 @@
 <?php
 
-namespace WonderGame\EsUtility\HttpController\Admin;
+namespace WonderGame\CenterUtility\HttpController\Admin;
 
 use EasySwoole\ORM\AbstractModel;
-use WonderGame\EsUtility\Common\Classes\DateUtils;
-use WonderGame\EsUtility\Common\Http\Code;
-use WonderGame\EsUtility\Common\Languages\Dictionary;
-use WonderGame\EsUtility\HttpController\BaseControllerTrait;
+use WonderGame\CenterUtility\Common\Classes\DateUtils;
+use WonderGame\CenterUtility\Common\Http\Code;
+use WonderGame\CenterUtility\Common\Languages\Dictionary;
+use WonderGame\CenterUtility\HttpController\BaseControllerTrait;
 
 /**
  * @extends BaseControllerTrait

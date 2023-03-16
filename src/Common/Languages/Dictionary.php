@@ -1,7 +1,7 @@
 <?php
 
 
-namespace WonderGame\EsUtility\Common\Languages;
+namespace WonderGame\CenterUtility\Common\Languages;
 
 use EasySwoole\I18N\AbstractDictionary;
 
@@ -32,11 +32,11 @@ class Dictionary extends AbstractDictionary
 	const CANCEL_CLOSE = 'CANCEL_CLOSE';
 	const PAYSUCCESS = 'PAYSUCCESS';
 	const PREPARING = 'PREPARING';
-	
+
 	/**************** 命名规则: 除最后一个_后表示数量，前面的皆表示目录分割 ******************/
 	// 网络错误
 	const BASECONTROLLERTRAIT_1 = 'BASECONTROLLERTRAIT_1';
-	
+
 	const ADMIN_AUTHTRAIT_1 = 'ADMIN_AUTHTRAIT_1';
 	const ADMIN_AUTHTRAIT_2 = 'ADMIN_AUTHTRAIT_2';
 	const ADMIN_AUTHTRAIT_3 = 'ADMIN_AUTHTRAIT_3';
@@ -65,11 +65,11 @@ class Dictionary extends AbstractDictionary
 	const ADMIN_ADMINTRAIT_7 = 'ADMIN_ADMINTRAIT_7';
 	const ADMIN_ADMINTRAIT_8 = 'ADMIN_ADMINTRAIT_8';
 	const ADMIN_ADMINTRAIT_9 = 'ADMIN_ADMINTRAIT_9';
-	
+
 	const ADMIN_BASETRAIT_1 = 'ADMIN_BASETRAIT_1';
-	
+
 	const ADMIN_MENUTRAIT_1 = 'ADMIN_MENUTRAIT_1';
-	
+
 	const ADMIN_PUBTRAIT_1 = 'ADMIN_PUBTRAIT_1';
 	const ADMIN_PUBTRAIT_2 = 'ADMIN_PUBTRAIT_2';
 	const ADMIN_PUBTRAIT_3 = 'ADMIN_PUBTRAIT_3';

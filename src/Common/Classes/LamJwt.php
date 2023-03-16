@@ -6,7 +6,7 @@
  * @version 1.0.2 最后修改时间 2020年10月21日
  */
 
-namespace WonderGame\EsUtility\Common\Classes;
+namespace WonderGame\CenterUtility\Common\Classes;
 
 use EasySwoole\Jwt\Jwt;
 
@@ -24,13 +24,13 @@ class LamJwt
 	{
 		$time = time();
 		$uniqid = uniqid();
-		
+
 		is_array($extend) && extract($extend);
-		
+
 		$jwt = Jwt::getInstance()
 			->setSecretKey($key ?: config('ENCRYPT.key')) // 秘钥
 			->publish();
-		
+
 		$jwt->setAlg('HMACSHA256'); // 加密方式
 		$jwt->setAud($aud ?? ''); // 用户(接收jwt的一方)
 		$jwt->setExp($time + $expire); // 过期时间
@@ -39,15 +39,15 @@ class LamJwt
 		$jwt->setJti($uniqid); // jwt id 用于标识该jwt
 		//$jwt->setNbf(time()+60*5); // 在此之前不可用
 		$jwt->setSub($sub ?? ''); // 主题
-		
+
 		// 自定义数据
 		$jwt->setData($data);
-		
+
 		// 最终生成的token
 		$token = $jwt->__toString();
 		return base64_encode($token);
 	}
-	
+
 	/**
 	 * 验证和解析jwt
 	 * @param string $token
@@ -61,7 +61,7 @@ class LamJwt
 		try {
 			$jwt = Jwt::getInstance()->setSecretKey($key ?: config('ENCRYPT.key'))->decode($token);
 			$status = $jwt->getStatus();
-			
+
 			switch ($status) {
 				case  1:
 					$data = [
@@ -83,9 +83,9 @@ class LamJwt
 					break;
 			}
 		} catch (\EasySwoole\Jwt\Exception $e) {
-		
+
 		}
-		
+
 		return ['status' => $status, 'data' => $data];
 	}
 }

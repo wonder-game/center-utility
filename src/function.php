@@ -15,9 +15,9 @@ use WonderGame\EsNotify\DingTalk\Message\Text;
 use WonderGame\EsNotify\EsNotify;
 use WonderGame\EsNotify\WeChat\Message\Notice;
 use WonderGame\EsNotify\WeChat\Message\Warning;
-use WonderGame\EsUtility\Common\Classes\LamJwt;
-use WonderGame\EsUtility\Common\Classes\Mysqli;
-use WonderGame\EsUtility\HttpTracker\Index as HttpTracker;
+use WonderGame\CenterUtility\Common\Classes\LamJwt;
+use WonderGame\CenterUtility\Common\Classes\Mysqli;
+use WonderGame\CenterUtility\HttpTracker\Index as HttpTracker;
 
 
 if ( ! function_exists('is_super')) {
@@ -402,7 +402,7 @@ if ( ! function_exists('ip')) {
     {
         // Request继承 \EasySwoole\Http\Message\Message 皆可
         if ( ! $Request instanceof \EasySwoole\Http\Request) {
-            $Request = \WonderGame\EsUtility\Common\Classes\CtxRequest::getInstance()->request;
+            $Request = \WonderGame\CenterUtility\Common\Classes\CtxRequest::getInstance()->request;
             if (empty($Request)) {
                 return false;
             }

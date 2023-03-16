@@ -1,10 +1,10 @@
 <?php
 
-namespace WonderGame\EsUtility\Model\Log;
+namespace WonderGame\CenterUtility\Model\Log;
 
 use EasySwoole\HttpClient\Bean\Response;
 use EasySwoole\HttpClient\HttpClient;
-use WonderGame\EsUtility\Common\Classes\LamOpenssl;
+use WonderGame\CenterUtility\Common\Classes\LamOpenssl;
 
 trait HttpTrackerTrait
 {

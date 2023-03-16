@@ -1,6 +1,6 @@
 <?php
 
-namespace WonderGame\EsUtility\Model\Admin;
+namespace WonderGame\CenterUtility\Model\Admin;
 
 trait PackageModelTrait
 {

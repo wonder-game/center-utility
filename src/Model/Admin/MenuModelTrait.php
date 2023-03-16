@@ -1,9 +1,9 @@
 <?php
 
-namespace WonderGame\EsUtility\Model\Admin;
+namespace WonderGame\CenterUtility\Model\Admin;
 
 use EasySwoole\ORM\AbstractModel;
-use WonderGame\EsUtility\Common\Classes\Tree;
+use WonderGame\CenterUtility\Common\Classes\Tree;
 
 /**
  * @extends AbstractModel

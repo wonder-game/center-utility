@@ -1,11 +1,11 @@
 <?php
 
-namespace WonderGame\EsUtility\Task;
+namespace WonderGame\CenterUtility\Task;
 
 use EasySwoole\Mysqli\QueryBuilder;
 use EasySwoole\ORM\AbstractModel;
 use EasySwoole\Task\AbstractInterface\TaskInterface;
-use WonderGame\EsUtility\Common\Classes\CtxRequest;
+use WonderGame\CenterUtility\Common\Classes\CtxRequest;
 
 /**
  * 异步更新从库数据

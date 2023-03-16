@@ -1,12 +1,12 @@
 <?php
 
-namespace WonderGame\EsUtility\HttpController;
+namespace WonderGame\CenterUtility\HttpController;
 
 use EasySwoole\EasySwoole\Core;
 use EasySwoole\Http\AbstractInterface\Controller;
-use WonderGame\EsUtility\Common\Exception\HttpParamException;
-use WonderGame\EsUtility\Common\Http\Code;
-use WonderGame\EsUtility\Common\Languages\Dictionary;
+use WonderGame\CenterUtility\Common\Exception\HttpParamException;
+use WonderGame\CenterUtility\Common\Http\Code;
+use WonderGame\CenterUtility\Common\Languages\Dictionary;
 
 /**
  * @extends Controller
