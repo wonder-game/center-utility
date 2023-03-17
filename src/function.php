@@ -729,12 +729,12 @@ if ( ! function_exists('get_login_token')) {
 	 * @param $id
 	 * @return string
 	 */
-	function get_login_token($id, $expire = null)
+	function get_login_token($data, $expire = null)
 	{
 		if (is_null($expire) || ! is_numeric($expire)) {
 			$expire = config('auth.expire');
 		}
-		return LamJwt::getToken(['id' => $id], config('auth.jwtkey'), $expire);
+		return LamJwt::getToken($data, config('auth.jwtkey'), $expire);
 	}
 }
 

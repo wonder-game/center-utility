@@ -1,4 +1,3 @@
-
 ### 简介
 
     基于Easyswoole封装的一些Trait和Class，放到Composer仓库以实现多项目共用一套代码
@@ -122,3 +121,14 @@ trait有哪些坑
 - [trait冲突解决](https://www.php.net/manual/zh/language.oop5.traits.php)
 - [XlsWriter](https://xlswriter-docs.viest.me/zh-cn)
 
+### 关于
+
+#### 为何menu需要区分系统
+
+1. 同一账号是允许在多个系统中登录的
+2. 如果不使用系统来约束，那么会返回不存在的路由，前端的路由注册一定会报错
+
+例如
+
+一共有1、2、3、4、5、6 个菜单，用户A在admin系统有123菜单，在other系统有456
+如果菜单没有区分系统，则A无论登录什么系统都会返回他拥有的所有菜单，而客户端去注册不存在的路由时，报错！

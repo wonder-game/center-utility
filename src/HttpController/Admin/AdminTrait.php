@@ -48,7 +48,7 @@ trait AdminTrait
         if ( ! empty($this->operinfo['extension']['homePath'])) {
             /** @var AbstractModel $Menu */
             $Menu = model_admin('Menu');
-            $homePage = $Menu->getHomePage($this->operinfo['extension']['homePath']);
+            $homePage = $Menu->getHomePage($this->operinfo['extension']['homePath'], $this->sub);
         }
         $avatar = $this->operinfo['avatar'] ?? '';
 
@@ -79,7 +79,7 @@ trait AdminTrait
     {
         /** @var \App\Model\Admin\Menu $model */
         $model = model_admin('Menu');
-        $code = $model->permCode($this->operinfo['rid']);
+        $code = $model->permCode($this->operinfo['rid'], $this->sub);
         return $return ? $code : $this->success($code);
     }
 
@@ -101,6 +101,8 @@ trait AdminTrait
             // 默认首页treeSelect, 仅看有权限的菜单
             /** @var \App\Model\Admin\Menu $Menu */
             $Menu = model_admin('Menu');
+
+            $Menu->where("(FIND_IN_SET('{$this->sub}', sub) > 0 OR sub='')");
 
             $menuList = $Menu->getTree(
                 ['type' => [[0, 1], 'in'], 'status' => 1],
@@ -125,23 +127,5 @@ trait AdminTrait
 
             return $this->_edit($return);
         }
-    }
-
-    public function _getToken($return = false)
-    {
-        // 此接口比较重要，只允许超级管理员调用
-        if ( ! $this->isSuper()) {
-            throw new HttpParamException(lang(Dictionary::PERMISSION_DENIED));
-        }
-        if ( ! isset($this->get['id'])) {
-            throw new HttpParamException(lang(Dictionary::ADMIN_ADMINTRAIT_8));
-        }
-        $id = $this->get['id'];
-        $isExtsis = $this->Model->where(['id' => $id, 'status' => 1])->count();
-        if ( ! $isExtsis) {
-            throw new HttpParamException(lang(Dictionary::ADMIN_ADMINTRAIT_9));
-        }
-        $token = get_login_token($id, 3600);
-        return $return ? $token : $this->success($token);
     }
 }

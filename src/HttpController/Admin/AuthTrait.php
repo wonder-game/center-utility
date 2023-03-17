@@ -42,6 +42,12 @@ trait AuthTrait
 
     protected $isExport = false;
 
+    /**
+     * 当前登录的系统
+     * @var string
+     */
+    protected $sub = '';
+
     protected function onRequest(?string $action): ?bool
     {
         $this->setAuthTraitProptected();
@@ -87,6 +93,12 @@ trait AuthTrait
         $id = $jwt['data']['id'] ?? '';
         if ($jwt['status'] != 1 || empty($id)) {
             $this->error(Code::CODE_UNAUTHORIZED, Dictionary::ADMIN_AUTHTRAIT_2);
+            return false;
+        }
+
+        $this->sub = $jwt['data']['sub'];
+        if ( ! in_array($this->sub, config('SUB_SYSTEM') ?: [])) {
+            $this->error(Code::ERROR_OTHER, Dictionary::CANT_FIND_USER);
             return false;
         }
 

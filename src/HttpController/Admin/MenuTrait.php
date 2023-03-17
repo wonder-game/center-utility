@@ -25,22 +25,12 @@ trait MenuTrait
 		if (isset($input['status']) && $input['status'] !== '') {
 			$where['status'] = $input['status'];
 		}
+        if (isset($input['sub'])) {
+            $this->Model->where("(FIND_IN_SET('{$input['sub']}', sub) > 0 OR sub='')");
+        }
 
 		$result = $this->Model->getTree($where);
 		$this->success($result);
-	}
-
-    public function _add($return = false)
-	{
-		// 如果name不为空，检查唯一性
-		$name = $this->post['name'] ?? '';
-		if ( ! empty($name)) {
-			$model = $this->Model->_clone();
-			if ($model->where('name', $name)->count()) {
-				return $this->error(Code::ERROR_OTHER, Dictionary::ADMIN_MENUTRAIT_1);
-			}
-		}
-		return parent::_add($return);
 	}
 
 	/**
@@ -55,6 +45,7 @@ trait MenuTrait
 
         $where = ['type' => [[0, 1], 'in'], 'status' => 1 ];
         $options = ['isRouter' => true, 'filterIds' => $userMenus];
+        $this->Model->where("(FIND_IN_SET('{$this->sub}', sub) > 0 OR sub='')");
         $menu = $this->Model->getTree($where, $options);
 		return $return ? $menu : $this->success($menu);
 	}

@@ -15,6 +15,16 @@ trait MenuModelTrait
 		$this->sort = ['sort' => 'asc', 'id' => 'desc'];
 	}
 
+    protected function setSubAttr($data)
+    {
+        return is_array($data) ? implode(',', $data) : $data;
+    }
+
+    protected function getSubAttr($data)
+    {
+        return $data && is_string($data) ? explode(',', $data) : $data;
+    }
+
 	protected function setRedirectAttr($data, $alldata)
 	{
 		return $data ? '/' . ltrim($data, '/') : '';
@@ -56,9 +66,11 @@ trait MenuModelTrait
 		return $Tree->treeData();
 	}
 
-    public function getHomePage($id)
+    public function getHomePage($id, $sub)
     {
-        $data = $this->where(['type' => [[0, 1], 'in']])->setOrder()->all();
+        $data = $this->where(['type' => [[0, 1], 'in']])
+            ->where("(FIND_IN_SET('$sub', sub) > 0 OR sub='')")
+            ->setOrder()->all();
         $Tree = new Tree(['data' => $data, 'filterIds' => $id]);
         return $Tree->getHomePage();
     }
@@ -71,21 +83,23 @@ trait MenuModelTrait
 	 * @throws \EasySwoole\ORM\Exception\Exception
 	 * @throws \Throwable
 	 */
-	public function permCode($rid): array
-	{
-		$where = ['permission' => ['', '<>']];
+    public function permCode($rid, $sub): array
+    {
+        $where = ['permission' => ['', '<>']];
 
-		if ( ! is_super($rid)) {
-			/** @var AbstractModel $Role */
-			$Role = model_admin('Role');
-			$menuIds = $Role->where('id', $rid)->val('menu');
-			if (empty($menuIds)) {
-				return [];
-			}
+        if ( ! is_super($rid)) {
+            /** @var AbstractModel $Role */
+            $Role = model_admin('Role');
+            $menuIds = $Role->where('id', $rid)->val('menu');
+            if (empty($menuIds)) {
+                return [];
+            }
 
-			$where['id'] = [$menuIds, 'in'];
-		}
-		$permission = $this->where($where)->column('permission');
-		return is_array($permission) ? $permission : [];
-	}
+            $where['id'] = [$menuIds, 'in'];
+        }
+        $permission = $this->where($where)
+            ->where("(FIND_IN_SET('$sub', sub) > 0 OR sub='')")
+            ->column('permission');
+        return is_array($permission) ? $permission : [];
+    }
 }

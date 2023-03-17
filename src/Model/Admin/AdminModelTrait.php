@@ -20,6 +20,16 @@ trait AdminModelTrait
 		$this->sort = ['sort' => 'asc', 'id' => 'asc'];
 	}
 
+    protected function setSubAttr($data)
+    {
+        return is_array($data) ? implode(',', $data) : '';
+    }
+
+    protected function getSubAttr($data)
+    {
+        return $data && is_string($data) ? explode(',', $data) : $data;
+    }
+
 	protected function setPasswordAttr($password = '', $alldata = [])
 	{
 		if ($password != '') {

@@ -50,6 +50,12 @@ trait PubTrait
 			throw new HttpParamException(lang(Dictionary::ADMIN_PUBTRAIT_2));
 		}
 
+        // 是否此系统账号
+        $sub = $this->input['sub'];
+        if ( ! empty($data['sub']) && (empty($sub) || ! in_array($sub, $data['sub']))) {
+            throw new HttpParamException(lang(Dictionary::ADMIN_PUBTRAIT_5));
+        }
+
 		$request = CtxRequest::getInstance()->request;
 		$this->Model->signInLog([
 			'admid' => $data['id'],
@@ -57,7 +63,7 @@ trait PubTrait
 			'ip' => ip($request),
 		]);
 
-		$token = get_login_token($data['id']);
+		$token = get_login_token(['id' => $data['id'], 'sub' => $sub]);
         $result = ['token' => $token];
         return $return ? $result + ['data'=>$data] : $this->success($result, Dictionary::ADMIN_PUBTRAIT_3);
 	}
