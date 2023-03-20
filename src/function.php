@@ -742,12 +742,13 @@ if ( ! function_exists('get_login_token')) {
 if ( ! function_exists('is_env')) {
 	/**
 	 * 判断当前运行环境
-	 * @param $env dev|test|produce|...
+	 * @param string | array $env dev|test|produce|...
 	 * @return bool
 	 */
 	function is_env($env = 'dev')
 	{
-		return \EasySwoole\EasySwoole\Core::getInstance()->runMode() === $env;
+        $_env = \EasySwoole\EasySwoole\Core::getInstance()->runMode();
+		return is_array($env) ? in_array($_env, $env)  :  $_env === $env;
 	}
 }
 

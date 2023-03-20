@@ -31,6 +31,11 @@ trait BaseControllerTrait
      */
     protected $input = [];
 
+    /**
+     * @var mixed rawContent
+     */
+    protected $raw = '';
+
     private $langsConstants = [];
 
     protected $actionNotFoundPrefix = '_';
@@ -58,6 +63,9 @@ trait BaseControllerTrait
         }
         $this->post = is_array($post) ? $post : [];
         $this->input = array_merge($this->get, $this->post);
+
+        //  $this->request()->getSwooleRequest()->rawContent()也可以
+        $this->raw = $this->request()->getBody()->__toString();
     }
 
     protected function setLanguageConstants()

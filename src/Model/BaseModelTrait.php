@@ -11,11 +11,9 @@ use EasySwoole\RedisPool\RedisPool;
  */
 trait BaseModelTrait
 {
-	protected $gameid = '';
+    protected $sort = ['id' => 'desc'];
 
-	protected $sort = ['id' => 'desc'];
-
-	public function __construct($data = [], $tabname = '', $gameid = '')
+	public function __construct($data = [], $tabname = '')
 	{
 		// $tabname > $this->tableName > $this->_getTable()
 		$tabname && $this->tableName = $tabname;
@@ -23,9 +21,7 @@ trait BaseModelTrait
 			$this->tableName = $this->_getTable();
 		}
 
-		$this->gameid = $gameid;
-
-//        $this->autoTimeStamp = false;
+        //  $this->autoTimeStamp = false;
 		$this->createTime = 'instime';
 		$this->updateTime = false;
 		$this->setBaseTraitProptected();
