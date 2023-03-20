@@ -100,6 +100,20 @@ trait BaseControllerTrait
         return $data;
     }
 
+    protected function getAuthorization()
+    {
+        $tokenKey = config('TOKEN_KEY');
+        if ( ! $this->request()->hasHeader($tokenKey)) {
+            return false;
+        }
+
+        $authorization = $this->request()->getHeader($tokenKey);
+        if (is_array($authorization)) {
+            $authorization = current($authorization);
+        }
+        return $authorization;
+    }
+
     protected function onException(\Throwable $throwable): void
     {
         if ($throwable instanceof HttpParamException) {

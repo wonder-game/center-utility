@@ -79,6 +79,74 @@ trait AuthTrait
     {
     }
 
+    // 其他系统，http发送给账号管理系统认证, todo 得上RPC
+    protected function httpCheckAuth()
+    {
+        // 发送http前，判断无需认证操作和转换别名认证操作
+        $query = [];
+
+        $publicMethods = $this->getAllowMethods('strtolower');
+
+        $currentAction = strtolower($this->getActionName());
+        if ( ! in_array($currentAction, $publicMethods)) {
+            $this->error(Code::CODE_FORBIDDEN);
+            return false;
+        }
+
+        $currentClassName = strtolower($this->getStaticClassName());
+        $fullPath = strtolower("/$currentClassName/$currentAction");
+
+        $selfRef = new \ReflectionClass(self::class);
+        $selfDefaultProtected = $selfRef->getDefaultProperties();
+        $selfOmitAction = $selfDefaultProtected['_authOmit'] ?? [];
+        $selfAliasAction = $selfDefaultProtected['_authAlias'] ?? [];
+
+        // 无需认证操作
+        if ($omitAction = array_map('strtolower', array_merge($selfOmitAction, $this->_authOmit))) {
+            if (in_array($fullPath, $omitAction)) {
+                // 标识为无需认证，仅返回用户数据
+                $query['omit'] = 1;
+            }
+        }
+
+        // 别名认证操作
+        $aliasAction = array_change_key_case(array_map('strtolower', array_merge($selfAliasAction, $this->_authAlias)));
+        if ($aliasAction && isset($aliasAction[$currentAction])) {
+            $alias = trim($aliasAction[$currentAction], '/');
+            if (in_array($alias, $publicMethods)) {
+                $fullPath = "/$currentClassName/$alias";
+            }
+        }
+
+        $query['permCode'] = $fullPath;
+
+        $url = config('DOMAIN_URL.auth');
+        if (empty($url)) {
+            $this->error(Code::CODE_FORBIDDEN, '缺少配置： DOMAIN_URL.auth');
+            return false;
+        }
+
+        $tokenKey = config('TOKEN_KEY');
+
+        $HttpClient = new \EasySwoole\HttpClient\HttpClient($url);
+        // 全站通用jwt密钥
+        $HttpClient->setHeader($tokenKey, $this->getAuthorization(), false);
+        $resp = $HttpClient->setQuery($query)->get();
+        $result = $resp->json(true);
+
+        // 失败 || 没权限
+        if ($resp->getStatusCode() !== 200 || ! isset($result['code']) || $result['code'] !== 200) {
+            $this->error(Code::CODE_FORBIDDEN, $result['msg']);
+            return false;
+        }
+
+        $this->operinfo = $result['result']['operinfo'];
+        CtxRequest::getInstance()->withOperinfo($this->operinfo);
+
+        return true;
+    }
+
+    // 账号管理系统，本站权限认证
     protected function checkAuthorization()
     {
         $authorization = $this->getAuthorization();
@@ -158,7 +226,9 @@ trait AuthTrait
             $Menu->where('id', $userMenu, 'IN');
         }
 
-        $priv = $Menu->where('permission', '', '<>')->where('status', 1)->column('permission');
+        $priv = $Menu->where(['permission' => ['', '<>'], 'status' => 1])
+            ->where("FIND_IN_SET('{$this->sub}', sub) > 0")
+            ->column('permission');
         if (empty($priv)) {
             return true;
         }
@@ -176,7 +246,7 @@ trait AuthTrait
         // 无需认证操作
         if ($omitAction = array_map('strtolower', array_merge($selfOmitAction, $this->_authOmit))) {
             foreach ($omitAction as $omit) {
-                in_array($omit, $publicMethods) && $policy->addPath("/$currentClassName/" . $omit);
+                in_array($omit, $publicMethods) && $policy->addPath("/$currentClassName/$omit");
             }
         }
 

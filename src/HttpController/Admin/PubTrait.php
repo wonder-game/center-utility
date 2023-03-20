@@ -65,7 +65,7 @@ trait PubTrait
 
 		$token = get_login_token(['id' => $data['id'], 'sub' => $sub]);
         $result = ['token' => $token];
-        return $return ? $result + ['data'=>$data] : $this->success($result, Dictionary::ADMIN_PUBTRAIT_3);
+        return $return ? $result + ['data' => $data] : $this->success($result, Dictionary::ADMIN_PUBTRAIT_3);
 	}
 
 	public function logout()
