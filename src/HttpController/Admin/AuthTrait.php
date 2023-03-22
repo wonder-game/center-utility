@@ -140,6 +140,7 @@ trait AuthTrait
             return false;
         }
 
+        $this->sub = $result['result']['sub'];
         $this->operinfo = $result['result']['operinfo'];
         CtxRequest::getInstance()->withOperinfo($this->operinfo);
 

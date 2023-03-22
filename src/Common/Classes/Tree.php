@@ -184,40 +184,4 @@ class Tree extends SplBean
             $value = $row;
         }
     }
-
-    /**
-     * 获取某一个菜单的完整path，对应vben的homePath字段
-     * @param $id 菜单id
-     * @param $column
-     * @return string
-     */
-    public function getHomePage($id = null, $column = 'path')
-    {
-        // 不传则使用filterIds
-        if (is_null($id)) {
-            $id = $this->filterIds;
-        }
-        $id = is_array($id) ? $id[0] : $id;
-        $path = $this->getFullPath($id, $column);
-        return implode('/', array_reverse($path));
-    }
-
-    /**
-     * 指定id的完整path路径，有序
-     * @param int $id
-     * @param int $i
-     * @return array
-     */
-    protected function getFullPath($id, $column = '', $i = 0)
-    {
-        $path = [];
-        if (isset($this->origin[$id][$column])) {
-            $path[$i] = $this->origin[$id][$column];
-            if (isset($this->parent[$id])) {
-                $array = $this->getFullPath($this->parent[$id], $column, ++$i);
-                $path = array_merge($path, $array);
-            }
-        }
-        return $path;
-    }
 }

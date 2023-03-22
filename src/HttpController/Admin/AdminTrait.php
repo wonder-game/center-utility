@@ -45,11 +45,6 @@ trait AdminTrait
         ];
 
         // 客户端进入页,应存id
-        if ( ! empty($this->operinfo['extension']['homePath'])) {
-            /** @var AbstractModel $Menu */
-            $Menu = model_admin('Menu');
-            $homePage = $Menu->getHomePage($this->operinfo['extension']['homePath'], $this->sub);
-        }
         $avatar = $this->operinfo['avatar'] ?? '';
 
         $result = [
@@ -58,7 +53,6 @@ trait AdminTrait
             'realname' => $this->operinfo['realname'],
             'avatar' => $avatar,
             'desc' => $this->operinfo['desc'] ?? '',
-            'homePath' => $homePage ?? '',
             'roles' => [
                 [
                     'roleName' => $this->operinfo['role']['name'] ?? '',
