@@ -184,13 +184,19 @@ trait AuthTrait
         }
 
         // 关联的分组信息
-        $relation = $data->relation ? $data->relation->toArray() : [];
-        $this->operinfo = $data->toArray();
-        $this->operinfo['role'] = $relation;
+        $this->operinfo = $this->_operinfo($data);
 
         // 将管理员信息挂载到Request
         CtxRequest::getInstance()->withOperinfo($this->operinfo);
         return $this->checkAuth();
+    }
+
+    protected function _operinfo($data)
+    {
+        $relation = $data->relation ? $data->relation->toArray() : [];
+        $data = $data->toArray();
+        $data['role'] = $relation;
+        return $data;
     }
 
     /**
