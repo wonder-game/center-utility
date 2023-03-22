@@ -64,7 +64,10 @@ class Http implements Interfaces
                     throw new \Exception('Missing configuration: CRONTAB.encry.rsa');
                 }
                 $openssl = LamOpenssl::getInstance($rsaConfig['private'], $rsaConfig['public']);
-                return [$rsaConfig['key'] => $openssl->encrypt(json_encode($data))];
+                return [
+                    'encry' => $data['encry'],
+                    $rsaConfig['key'] => $openssl->encrypt(json_encode($data))
+                ];
             case 'md5':
                 if (empty($config['encry']['md5']['key'])) {
                     throw new \Exception('Missing configuration: CRONTAB.encry.md5');
