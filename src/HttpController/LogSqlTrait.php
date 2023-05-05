@@ -1,6 +1,6 @@
 <?php
 
-namespace WonderGame\CenterUtility\HttpController\Admin;
+namespace WonderGame\CenterUtility\HttpController;
 
 trait LogSqlTrait
 {

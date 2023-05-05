@@ -1,7 +1,7 @@
 <?php
 
 
-namespace WonderGame\CenterUtility\Model\Admin;
+namespace WonderGame\CenterUtility\Model;
 
 
 trait LogErrorTrait

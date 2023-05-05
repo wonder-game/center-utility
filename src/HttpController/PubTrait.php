@@ -1,15 +1,10 @@
 <?php
 
 
-namespace WonderGame\CenterUtility\HttpController\Admin;
+namespace WonderGame\CenterUtility\HttpController;
 
-use EasySwoole\Component\Timer;
-use EasySwoole\Utility\MimeType;
 use WonderGame\CenterUtility\Common\Classes\CtxRequest;
-use WonderGame\CenterUtility\Common\Classes\LamJwt;
-use WonderGame\CenterUtility\Common\Classes\XlsWriter;
 use WonderGame\CenterUtility\Common\Exception\HttpParamException;
-use WonderGame\CenterUtility\Common\Http\Code;
 use WonderGame\CenterUtility\Common\Languages\Dictionary;
 
 /**
@@ -19,7 +14,7 @@ trait PubTrait
 {
     protected function instanceModel()
     {
-        $this->Model = model_admin('Admin');
+        $this->Model = model_account('Admin');
         return true;
     }
 

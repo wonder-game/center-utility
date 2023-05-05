@@ -1,6 +1,6 @@
 <?php
 
-namespace WonderGame\CenterUtility\HttpController\Admin;
+namespace WonderGame\CenterUtility\HttpController;
 
 use App\HttpController\BaseController;
 use EasySwoole\Component\Timer;
@@ -65,7 +65,7 @@ trait AuthTrait
     protected function _getEntityData($id = 0)
     {
         /** @var AbstractModel $Admin */
-        $Admin = model_admin('Admin');
+        $Admin = model_account('Admin');
         // 当前用户信息
         return $Admin->where('id', $id)->get();
     }
@@ -222,7 +222,7 @@ trait AuthTrait
         $fullPath = "/$currentClassName/$currentAction";
 
         /** @var AbstractModel $Menu */
-        $Menu = model_admin('Menu');
+        $Menu = model_account('Menu');
         // 设置用户权限
         $userMenu = $this->getUserMenus();
         if ( ! is_null($userMenu)) {
@@ -645,33 +645,6 @@ trait AuthTrait
             $filter['endtime'] = strtotime($filter['endtime']);
             $filter['endday'] = date(DateUtils::YMD, $filter['endtime']);
         }
-
-
-        $extColName = ['gameid', 'pkgbnd', 'adid'];
-
-        // 特意让$filter拥有以下这几个key的成员，值至少为[]
-        // 这样外围有需要可直接写 $filter['XXX'] && ....，而不需要写isset($filter['XXX']) && $filter['XXX'] && ....
-        foreach ([... $extColName, 'status'] as $col) {
-            $filter[$col] = (isset($filter[$col]) && $filter[$col] !== '') ? explode(',', ($filter[$col])) : [];
-        }
-
-        // 非超级管理员只允许有权限的
-        if ( ! $this->isSuper()) {
-
-            foreach ($extColName as $col) {
-                // 是否需要校验相关权限
-                $isChk = ! empty($this->operinfo['role']['chk_' . $col]);
-                if ($isChk) {
-                    $my = $this->operinfo['role'][$col] ?? [];
-                    // 故意造一个不存在的值
-                    $my = $my ?: [-1];
-                    $filter[$col] = $filter[$col] ? array_intersect($my, $filter[$col]) : $my;
-                }
-            }
-        }
-
-        // 地区
-        $filter['area'] = $filter['area'] ?? '';
 
         return $filter;
     }

@@ -130,17 +130,18 @@ if ( ! function_exists('model_admin')) {
 	}
 }
 
-if ( ! function_exists('model_log')) {
-    /**
-     * @param string $name
-     * @param array $data
-     * @param bool|numeric $inject
-     * @return \EasySwoole\ORM\AbstractModel
-     */
-	function model_log(string $name = '', array $data = [], $inject = false)
-	{
-		return model('Log\\' . ucfirst($name), $data, $inject);
-	}
+if ( ! function_exists('model_account')) {
+    function model_account(string $name = '', array $data = [], $inject = false)
+    {
+        return model('Account\\' . ucfirst($name), $data, $inject);
+    }
+}
+
+if ( ! function_exists('model_iot')) {
+    function model_iot(string $name = '', array $data = [], $inject = false)
+    {
+        return model('Iot\\' . ucfirst($name), $data, $inject);
+    }
 }
 
 if ( ! function_exists('config')) {
@@ -783,19 +784,6 @@ if ( ! function_exists('json_decode_ext'))
     }
 }
 
-if ( ! function_exists('get_google_service_account')) {
-
-    /**
-     * Google服务账号文件路径
-     * @param $pkgbnd
-     * @return string
-     */
-    function get_google_service_account($pkgbnd)
-    {
-        return EASYSWOOLE_ROOT . "/../utility/google-service-account_$pkgbnd.json";
-    }
-}
-
 if ( ! function_exists('http_tracker')) {
     /**
      * 子链路记录，返回一个结束回调，必须保证结束回调被调用
@@ -818,4 +806,12 @@ if ( ! function_exists('http_tracker')) {
         };
     }
 
+}
+
+if ( ! function_exists('get_sermod')) {
+    function get_sermod($serial = '', $ucfirst = true)
+    {
+        $mod = config("serial_map.$serial[0]");
+        return $ucfirst ? ucfirst($mod) : $mod;
+    }
 }

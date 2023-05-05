@@ -84,22 +84,6 @@ trait BaseControllerTrait
         return $this->langsConstants;
     }
 
-    protected function _isRsa($input = [], $header = [], $category = 'pay')
-    {
-        // 则要求JWT要符合规则
-        $data = verify_token($input, $header, 'operid');
-
-        // 如果不是rsa加密数据并且非本地开发环境
-        if (empty($input['envkeydata']) && ! empty($data['INVERTOKEN']) && ! is_env('dev')) {
-            trace('密文有误:' . var_export($input, true) . var_export($data, true), 'error', $category);
-            return false;
-        }
-
-        unset($data['token']);
-
-        return $data;
-    }
-
     protected function getAuthorization()
     {
         $tokenKey = config('TOKEN_KEY');

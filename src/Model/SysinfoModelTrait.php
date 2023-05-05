@@ -1,6 +1,6 @@
 <?php
 
-namespace WonderGame\CenterUtility\Model\Admin;
+namespace WonderGame\CenterUtility\Model;
 
 use WonderGame\CenterUtility\Common\OrmCache\SplArray;
 

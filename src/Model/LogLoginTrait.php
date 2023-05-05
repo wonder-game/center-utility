@@ -1,7 +1,7 @@
 <?php
 
 
-namespace WonderGame\CenterUtility\Model\Admin;
+namespace WonderGame\CenterUtility\Model;
 
 
 use EasySwoole\Mysqli\QueryBuilder;
@@ -24,6 +24,6 @@ trait LogLoginTrait
 			$query->fields(['id', 'username', 'realname', 'avatar', 'status']);
 			return $query;
 		};
-		return $this->hasOne(find_model('Admin\Admin'), $callback, 'uid', 'id');
+		return $this->hasOne(find_model('Account\Admin'), $callback, 'uid', 'id');
 	}
 }

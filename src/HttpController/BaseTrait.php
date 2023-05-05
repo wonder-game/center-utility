@@ -1,12 +1,10 @@
 <?php
 
-namespace WonderGame\CenterUtility\HttpController\Admin;
+namespace WonderGame\CenterUtility\HttpController;
 
 use EasySwoole\ORM\AbstractModel;
 use WonderGame\CenterUtility\Common\Classes\DateUtils;
 use WonderGame\CenterUtility\Common\Http\Code;
-use WonderGame\CenterUtility\Common\Languages\Dictionary;
-use WonderGame\CenterUtility\HttpController\BaseControllerTrait;
 
 /**
  * @extends BaseControllerTrait
@@ -58,20 +56,21 @@ trait BaseTrait
         return $this->writeJson(Code::CODE_OK, $result, $msg);
 	}
 
-    /**
-     * 如果GET有传tzn参数，自动注入连接并切时区
-     * @return bool
-     */
     protected function instanceModel()
     {
         if ( ! is_null($this->modelName)) {
-            $className = ucfirst($this->getStaticClassName());
-
             if ($this->modelName === '') {
-                $this->Model = model_admin($className, [], $this->get['tzn']);
-            } else {
-                $this->Model = model($this->modelName, [], $this->get['tzn']);
+
+                $array = explode('\\', static::class);
+                $count = count($array);
+                // 倒数第二个为模块
+                $module = $array[$count - 2];
+                // 最后一个为类名
+                $className = ucfirst($array[$count - 1]);
+
+                $this->modelName = "$module\\$className";
             }
+            $this->Model = model($this->modelName);
         }
         return true;
     }
