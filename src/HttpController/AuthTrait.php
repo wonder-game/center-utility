@@ -103,7 +103,7 @@ trait AuthTrait
 
         // 无需认证操作
         if ($omitAction = array_map('strtolower', array_merge($selfOmitAction, $this->_authOmit))) {
-            if (in_array($fullPath, $omitAction)) {
+            if (in_array($currentAction, $omitAction)) {
                 // 标识为无需认证，仅返回用户数据
                 $query['omit'] = 1;
             }
