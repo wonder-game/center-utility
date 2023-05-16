@@ -17,6 +17,8 @@ use WonderGame\EsNotify\WeChat\Message\Notice;
 use WonderGame\EsNotify\WeChat\Message\Warning;
 use WonderGame\CenterUtility\Common\Classes\LamJwt;
 use WonderGame\CenterUtility\Common\Classes\Mysqli;
+use WonderGame\CenterUtility\Common\Exception\HttpParamException;
+use WonderGame\CenterUtility\Common\Http\Code;
 use WonderGame\CenterUtility\HttpTracker\Index as HttpTracker;
 
 
@@ -370,26 +372,28 @@ if ( ! function_exists('difdate')) {
 
 
 if ( ! function_exists('verify_token')) {
-	/**
-	 * 验证jwt并读取用户信息
-	 */
-	function verify_token($orgs = [], $header = [], $key = 'uid')
-	{
-		$token = $header['HTTP_TOKEN'] ?? ($header['token'][0] ?? '');
-		if ( ! $token) {
-			// invalid_verify_token
-			return ['INVERTOKEN' => 1, 'code' => 401, 'msg' => '缺少token'];
-		}
-		// 验证JWT
-		$jwt = LamJwt::verifyToken($token);
-		if ($jwt['status'] != 1 || ! isset($jwt['data'][$key]) || ! isset($orgs[$key]) || $jwt['data'][$key] != $orgs[$key]) {
-			return ['INVERTOKEN' => 1, 'code' => 400, 'msg' => 'jwt有误'];
-		}
+    /**
+     * 验证jwt并读取用户信息
+     */
+    function verify_token($header = [], $key = 'uid', $orgs = [])
+    {
+        $token = $header[config('TOKEN_KEY')][0] ?? '';
+        if ( ! $token) {
+            throw new HttpParamException('缺少token', Code::CODE_UNAUTHORIZED);
+        }
+        // 验证JWT
+        $jwt = LamJwt::verifyToken($token);
+        if ($jwt['status'] != 1 || ! isset($jwt['data'][$key])) {
+            throw new HttpParamException('jwt有误', Code::CODE_BAD_REQUEST);
+        }
+        // 二次校验
+        if ($orgs && ( ! isset($orgs[$key]) || $jwt['data'][$key] != $orgs[$key])) {
+            throw new HttpParamException('jwt不符', Code::CODE_PRECONDITION_FAILED);
+        }
 
-		$jwt['data']['token'] = $token;
-
-		return $jwt['data'];
-	}
+        $jwt['data']['token'] = $token;
+        return $jwt['data'];
+    }
 }
 
 
@@ -419,8 +423,7 @@ if ( ! function_exists('ip')) {
         }
 
         // 其中“;”为getHeaderLine拼接, “, ”为代理拼接
-        foreach ([';', ','] as $delimiter)
-        {
+        foreach ([';', ','] as $delimiter) {
             if (strpos($ip, $delimiter) !== false) {
                 $ip = trim(explode($delimiter, $ip)[0]);
             }
@@ -483,8 +486,7 @@ if ( ! function_exists('dingtalk_markdown')) {
     {
         if (is_array($text)) {
             $arr = ['### **' . $title . '**'];
-            foreach ($text as $key => $value)
-            {
+            foreach ($text as $key => $value) {
                 $exp = strpos(strtolower($key), 'exp') === 0;
                 $arr[] = $exp ? $value : "- $key: $value";
             }
@@ -768,8 +770,7 @@ if ( ! function_exists('memory_convert')) {
 	}
 }
 
-if ( ! function_exists('json_decode_ext'))
-{
+if ( ! function_exists('json_decode_ext')) {
     /**
      * json_decode的加强版，自动将extension字段处理为数组类型
      * @param string $data
