@@ -727,32 +727,34 @@ if ( ! function_exists('array_merge_decode')) {
 
 
 if ( ! function_exists('get_login_token')) {
-	/**
-	 * 如果项目的token规则与此不同，请在项目中重写此函数
-	 * @param $id
-	 * @return string
-	 */
-	function get_login_token($data, $expire = null)
-	{
-		if (is_null($expire) || ! is_numeric($expire)) {
-			$expire = config('auth.expire');
-		}
-		return LamJwt::getToken($data, config('auth.jwtkey'), $expire);
-	}
+    /**
+     * 如果项目的token规则与此不同，请在项目中重写此函数
+     * @param array|int $id
+     * @return string
+     */
+    function get_login_token($id, $expire = null)
+    {
+        if ( ! is_numeric($expire)) {
+            $expire = config('auth.expire');
+        }
+        return LamJwt::getToken(is_array($id)? $id : ['id' => $id], config('auth.jwtkey'), $expire);
+    }
 }
 
 
 if ( ! function_exists('is_env')) {
-	/**
-	 * 判断当前运行环境
-	 * @param string | array $env dev|test|produce|...
-	 * @return bool
-	 */
-	function is_env($env = 'dev')
-	{
-        $_env = \EasySwoole\EasySwoole\Core::getInstance()->runMode();
+    /**
+     * 判断当前运行环境
+     * @param string $env dev|test|produce|user.test|sdk.dev|...
+     * @return bool
+     */
+    function is_env($env = 'dev')
+    {
+		$runMode = \EasySwoole\EasySwoole\Core::getInstance()->runMode();
+		$runMode = explode('.', $runMode);
+		$_env = $runMode[1]??$runMode[0];
 		return is_array($env) ? in_array($_env, $env)  :  $_env === $env;
-	}
+    }
 }
 
 if ( ! function_exists('memory_convert')) {

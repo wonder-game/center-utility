@@ -11,6 +11,7 @@ use EasySwoole\I18N\I18N;
 use EasySwoole\ORM\DbManager;
 use EasySwoole\Spl\SplBean;
 use EasySwoole\Trigger\TriggerInterface;
+use EasySwoole\Utility\File;
 use WonderGame\CenterUtility\Common\Classes\CtxRequest;
 use WonderGame\CenterUtility\Common\Classes\ExceptionTrigger;
 use WonderGame\CenterUtility\Common\Classes\LamUnit;
@@ -117,13 +118,33 @@ class EventInitialize extends SplBean
      */
     protected function registerConfig()
     {
-        $dirs = $this->configDir;
-        if ( ! is_array($dirs)) {
+        if ( ! $arr = $this->configDir) {
             return;
         }
-        foreach ($dirs as $dir) {
-            Config::getInstance()->loadDir($dir);
+        settype($arr, 'array');
+        $fileConfig = [];
+        $config = Config::getInstance()->toArray();
+        foreach ($arr as $item) {
+            if (is_dir($item)) {
+                // 遍历目录下的文件
+                $scanResult = scandir($item);
+                foreach ($scanResult as $files) {
+                    if (in_array($files, ['.', '..'])) {
+                        continue;
+                    }
+                    // 加载配置
+                    is_file($realPath = "$item/$files") && is_array($_cfg = include($realPath)) && ($config = array_merge_multi($config, $_cfg));
+                }
+            } elseif (is_file($item)) {
+                is_array($_cfg = include($item)) && ($fileConfig = array_merge_multi($fileConfig, $_cfg));
+            }
         }
+
+        // 文件配置优先级高于目录配置
+        if ($fileConfig) {
+            $config = array_merge_multi($config, $fileConfig);
+        }
+        Config::getInstance()->merge($config);
     }
 
     /**
@@ -136,8 +157,7 @@ class EventInitialize extends SplBean
         if ( ! is_array($config)) {
             return;
         }
-        foreach ($config as $mname => $mvalue)
-        {
+        foreach ($config as $mname => $mvalue) {
             DbManager::getInstance()->addConnection(
                 new \EasySwoole\ORM\Db\Connection(new \EasySwoole\ORM\Db\Config($mvalue)),
                 $mname
@@ -157,16 +177,14 @@ class EventInitialize extends SplBean
         if ( ! is_array($config)) {
             return;
         }
-        foreach ($config as $rname => $rvalue)
-        {
+        foreach ($config as $rname => $rvalue) {
             $RedisPoolConfig = \EasySwoole\RedisPool\RedisPool::getInstance()->register(
                 new \EasySwoole\Redis\Config\RedisConfig($rvalue),
                 $rname
             );
             // 排序，maxObjectNum > minObjectNum
             ksort($rvalue);
-            foreach ($rvalue as $key => $value)
-            {
+            foreach ($rvalue as $key => $value) {
                 $method = 'set' . ucfirst($key);
                 if (method_exists($RedisPoolConfig, $method)) {
                     call_user_func([$RedisPoolConfig, $method], $value);
@@ -199,21 +217,20 @@ class EventInitialize extends SplBean
                 }
 
                 // 除非显示声明_save_log不记录日志
-                if (! isset($this->mysqlOnQueryFunc['_save_log']) || $this->mysqlOnQueryFunc['_save_log'] !== false) {
+                if ( ! isset($this->mysqlOnQueryFunc['_save_log']) || $this->mysqlOnQueryFunc['_save_log'] !== false) {
                     trace($sql, 'info', 'sql');
                 }
 
                 // 不记录的SQL，表名
                 $logtable = config('NOT_WRITE_SQL.table');
                 if (is_array($logtable)) {
-                    foreach($logtable as $v) {
+                    foreach ($logtable as $v) {
                         if (
                             strpos($sql, "`$v`")
                             ||
                             // 支持  XXX*这种模糊匹配
                             (strpos($v, '*') && strpos($sql, '`' . str_replace('*', '', $v)))
-                        )
-                        {
+                        ) {
                             return;
                         }
                     }
@@ -231,6 +248,7 @@ class EventInitialize extends SplBean
                 if (is_callable($this->mysqlOnQueryFunc['_save_sql'])) {
                     $this->mysqlOnQueryFunc['_save_sql']($sql);
                 } else {
+                    /** @var \App\Model\Account\LogSql $Log */
                     $Log = model_account('LogSql');
                     $Log->sqlWriteLog($sql);
                 }
@@ -253,8 +271,7 @@ class EventInitialize extends SplBean
         if ( ! is_array($languages)) {
             return;
         }
-        foreach ($languages as $lang => $language)
-        {
+        foreach ($languages as $lang => $language) {
             $className = $language['class'];
             if ( ! class_exists($className)) {
                 continue;
