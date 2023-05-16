@@ -5,6 +5,7 @@ namespace WonderGame\CenterUtility\HttpController;
 use EasySwoole\EasySwoole\Core;
 use EasySwoole\Http\AbstractInterface\Controller;
 use WonderGame\CenterUtility\Common\Exception\HttpParamException;
+use WonderGame\CenterUtility\Common\Exception\WarnException;
 use WonderGame\CenterUtility\Common\Http\Code;
 use WonderGame\CenterUtility\Common\Languages\Dictionary;
 
@@ -83,6 +84,32 @@ trait BaseControllerTrait
     {
         return $this->langsConstants;
     }
+    
+    /** 检测是否为rsa解密数据（如本地开发环境则直接为true）
+     * @param array|null $input
+     * @return bool
+     */
+    protected function _isRsaDecode($input = null)
+    {
+        $input = is_null($input) ? $this->input : $input;
+        return ! empty($input[config('RSA.key')]) || is_env('dev');
+    }
+
+    protected function _isJwtAndRsa($input = [], $header = [], $category = 'pay')
+    {
+        // 要求JWT要符合规则
+        $data = verify_token($header, 'operid', $input);
+
+        // 如果不是rsa加密数据并且非本地开发环境
+        if ( ! $this->_isRsaDecode($input)) {
+            trace('密文有误:' . var_export($input, true) . var_export($data, true), 'error', $category);
+            return false;
+        }
+
+        unset($data['token']);
+
+        return $data;
+    }
 
     protected function getAuthorization()
     {
@@ -102,6 +129,16 @@ trait BaseControllerTrait
     {
         if ($throwable instanceof HttpParamException) {
             $message = $throwable->getMessage();
+        } elseif ($throwable instanceof WarnException) {
+            $message = $throwable->getMessage();
+            $task = \EasySwoole\EasySwoole\Task\TaskManager::getInstance();
+            $task->async(new \WonderGame\CenterUtility\Task\Error(
+                    [
+                        'message' => $message,
+                        'file' => $throwable->getFile(),
+                        'line' => $throwable->getLine(),
+                    ], $throwable->getData())
+            );
         } else {
             $message = ! is_env('produce') ? $throwable->getMessage() : lang(Dictionary::BASECONTROLLERTRAIT_1);
             // 交给异常处理器

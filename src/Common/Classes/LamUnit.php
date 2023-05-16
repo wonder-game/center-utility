@@ -37,6 +37,15 @@ class LamUnit
         }
     }
 
+    // 处理部分通用参数数组
+    static public function utilityParam(Request $request)
+    {
+        // 获取IP
+        $utility = ['ip' => ip($request)];
+
+        self::withParams($request, $utility, false);
+    }
+
     /**
      * @param Request $request
      * @param array $array 要合并的数据

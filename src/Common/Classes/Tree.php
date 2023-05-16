@@ -30,7 +30,7 @@ class Tree extends SplBean
      * 客户端路由格式
      * @var bool
      */
-    protected  $isRouter = false;
+    protected $isRouter = false;
 
     protected $idKey = 'id';
     protected $pidKey = 'pid';
@@ -75,8 +75,7 @@ class Tree extends SplBean
     protected function getParents(array $ids = [])
     {
         $idArray = $ids;
-        foreach ($ids as $id)
-        {
+        foreach ($ids as $id) {
             if (isset($this->parent[$id])) {
                 $pids = $this->getParents([$this->parent[$id]]);
                 if (is_array($pids)) {
@@ -100,8 +99,7 @@ class Tree extends SplBean
             }
 
             $allow = $this->getParents($this->filterIds);
-            foreach ($this->origin as $key => $value)
-            {
+            foreach ($this->origin as $key => $value) {
                 if ( ! in_array($key, $allow)) {
                     unset($this->origin[$key]);
                 }
@@ -127,8 +125,7 @@ class Tree extends SplBean
             $tree[$id] = &$tree[$value[$this->pidKey]][$this->childKey][$len];
         }
 
-        foreach ($tree as $item)
-        {
+        foreach ($tree as $item) {
             if ($item[$this->pidKey] == 0) {  // todo 处理rootId
                 $this->tree[] = $item;
             }
@@ -149,8 +146,7 @@ class Tree extends SplBean
         if ( ! $this->isRouter) {
             return;
         }
-        foreach ($this->origin as &$value)
-        {
+        foreach ($this->origin as &$value) {
             // 构造树形结构必须的几个key
             $row = [
                 $this->idKey => $value[$this->idKey],
@@ -183,5 +179,41 @@ class Tree extends SplBean
             $row['meta'] = $meta;
             $value = $row;
         }
+    }
+
+    /**
+     * 获取某一个菜单的完整path，对应vben的homePath字段
+     * @param array|int|null $id 菜单id
+     * @param string $column
+     * @return string
+     */
+    public function getHomePage($id = null, $column = 'path')
+    {
+        // 不传则使用filterIds
+        if (is_null($id)) {
+            $id = $this->filterIds;
+        }
+        $id = is_array($id) ? $id[0] : $id;
+        $path = $this->getFullPath($id, $column);
+        return implode('/', array_reverse($path));
+    }
+
+    /**
+     * 指定id的完整path路径，有序
+     * @param int $id
+     * @param int $i
+     * @return array
+     */
+    protected function getFullPath($id, $column = '', $i = 0)
+    {
+        $path = [];
+        if (isset($this->origin[$id][$column])) {
+            $path[$i] = $this->origin[$id][$column];
+            if (isset($this->parent[$id])) {
+                $array = $this->getFullPath($this->parent[$id], $column, ++$i);
+                $path = array_merge($path, $array);
+            }
+        }
+        return $path;
     }
 }

@@ -55,9 +55,7 @@ class Http implements Interfaces
     protected function body($data = [])
     {
         $config = config('CRONTAB');
-        $data['encry'] = $config['encry']['type'];
-
-        switch (strtolower($config['encry']['type'])) {
+        switch (strtolower($data['encry'] = $config['encry']['type'] ?? '')) {
             case 'rsa':
                 $rsaConfig = $config['encry']['rsa'] ?? config('RSA');
                 if (empty($rsaConfig)) {
