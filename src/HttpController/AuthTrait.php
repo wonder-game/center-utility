@@ -136,7 +136,7 @@ trait AuthTrait
 
         // 失败 || 没权限
         if ($resp->getStatusCode() !== 200 || ! isset($result['code']) || $result['code'] !== 200) {
-            $this->error(Code::CODE_FORBIDDEN, $result['msg']);
+            $this->error($result['code'] ?? Code::CODE_FORBIDDEN, $result['msg']);
             return false;
         }
 
