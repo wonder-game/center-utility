@@ -16,11 +16,11 @@ class LamJwt
      * 生成jwt
      * @param array $data
      * @param string $key
-     * @param int $expire
+	 * @param int|null $expire
      * @param array $extend
      * @return string jwt值
      */
-    public static function getToken($data = [], $key = '', $expire = 86400, $extend = [])
+	public static function getToken($data = [], $key = '', $expire = null, $extend = [])
     {
         $time = time();
         $uniqid = uniqid();
@@ -33,7 +33,7 @@ class LamJwt
 
         $jwt->setAlg('HMACSHA256'); // 加密方式
         $jwt->setAud($aud ?? ''); // 用户(接收jwt的一方)
-        $jwt->setExp($time + $expire); // 过期时间
+		$jwt->setExp($time + ($expire ?: config('ENCRYPT.expire'))); // 过期时间
         $jwt->setIat($time); // 发布时间
         $jwt->setIss($iss ?? ''); // 发行人(jwt签发者)
         $jwt->setJti($uniqid); // jwt id 用于标识该jwt

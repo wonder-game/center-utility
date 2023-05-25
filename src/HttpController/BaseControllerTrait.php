@@ -95,34 +95,28 @@ trait BaseControllerTrait
         return ! empty($input[config('RSA.key')]) || is_env('dev');
     }
 
-    protected function _isJwtAndRsa($input = [], $header = [], $category = 'pay')
+	/**
+	 * 检测是否至少符合Jwt或RSA
+	 * @param array|null $input
+	 * @return array|void
+	 */
+	protected function _isJwtOrRsa($input = [], $category = 'pay')
     {
-        // 要求JWT要符合规则
-        $data = verify_token($header, 'operid', $input);
-
+		try {
+			// 先尝试JWT
+			$data = verify_token([], 'uid', $input);
+		} catch (HttpParamException $e) {
+			// 记日志
+			trace('jwt验证不通过：【' . $e->getMessage() . '】将进行rsa检测。', 'error', $category);
         // 如果不是rsa加密数据并且非本地开发环境
         if ( ! $this->_isRsaDecode($input)) {
-            trace('密文有误:' . var_export($input, true) . var_export($data, true), 'error', $category);
-            return false;
+				throw new HttpParamException('密文有误:', Code::CODE_UNAUTHORIZED);
+			}
         }
 
         unset($data['token']);
 
         return $data;
-    }
-
-    protected function getAuthorization()
-    {
-        $tokenKey = config('TOKEN_KEY');
-        if ( ! $this->request()->hasHeader($tokenKey)) {
-            return false;
-        }
-
-        $authorization = $this->request()->getHeader($tokenKey);
-        if (is_array($authorization)) {
-            $authorization = current($authorization);
-        }
-        return $authorization;
     }
 
     protected function onException(\Throwable $throwable): void
