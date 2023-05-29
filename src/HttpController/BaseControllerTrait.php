@@ -2,7 +2,6 @@
 
 namespace WonderGame\CenterUtility\HttpController;
 
-use EasySwoole\EasySwoole\Core;
 use EasySwoole\Http\AbstractInterface\Controller;
 use WonderGame\CenterUtility\Common\Exception\HttpParamException;
 use WonderGame\CenterUtility\Common\Exception\WarnException;

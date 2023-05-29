@@ -126,11 +126,11 @@ trait AuthTrait
             return false;
         }
 
-        $tokenKey = config('TOKEN_KEY');
+        $tokenKey = config('ENCRYPT.jwtkey');
 
         $HttpClient = new \EasySwoole\HttpClient\HttpClient($url);
         // 全站通用jwt密钥
-        $HttpClient->setHeader($tokenKey, $this->getAuthorization(), false);
+        $HttpClient->setHeader($tokenKey, verify_token([], null), false);
         $resp = $HttpClient->setQuery($query)->get();
         $result = $resp->json(true);
 
@@ -150,29 +150,14 @@ trait AuthTrait
     // 账号管理系统，本站权限认证
     protected function checkAuthorization()
     {
-        $authorization = $this->getAuthorization();
-        if ( ! $authorization) {
-            $this->error(Code::CODE_UNAUTHORIZED, Dictionary::ADMIN_AUTHTRAIT_1);
-            return false;
-        }
-
-        // jwt验证
-        $jwt = $this->_verifyToken($authorization);
-
-        $id = $jwt['data']['id'] ?? '';
-        if ($jwt['status'] != 1 || empty($id)) {
-            $this->error(Code::CODE_UNAUTHORIZED, Dictionary::ADMIN_AUTHTRAIT_2);
-            return false;
-        }
-
-        $this->sub = $jwt['data']['sub'];
-        if ( ! in_array($this->sub, config('SUB_SYSTEM') ?: [])) {
+        $jwt = verify_token([], 'id');
+        if ( ! in_array($this->sub = $jwt['sub'], config('SUB_SYSTEM') ?: [])) {
             $this->error(Code::ERROR_OTHER, Dictionary::CANT_FIND_USER);
             return false;
         }
 
         // 当前用户信息
-        $data = $this->_getEntityData($id);
+        $data = $this->_getEntityData($jwt['id']);
         if (empty($data)) {
             $this->error(Code::ERROR_OTHER, Dictionary::ADMIN_AUTHTRAIT_3);
             return false;
