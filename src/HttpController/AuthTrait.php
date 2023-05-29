@@ -2,7 +2,7 @@
 
 namespace WonderGame\CenterUtility\HttpController;
 
-use App\HttpController\BaseController;
+use App\HttpController\Base;
 use EasySwoole\Component\Timer;
 use EasySwoole\Http\Exception\FileException;
 use EasySwoole\Mysqli\QueryBuilder;
@@ -19,7 +19,7 @@ use WonderGame\CenterUtility\Common\Http\Code;
 use WonderGame\CenterUtility\Common\Languages\Dictionary;
 
 /**
- * @extends BaseController
+ * @extends Base
  */
 trait AuthTrait
 {

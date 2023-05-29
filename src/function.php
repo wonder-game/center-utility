@@ -9,6 +9,7 @@ use EasySwoole\ORM\DbManager;
 use EasySwoole\RedisPool\RedisPool;
 use EasySwoole\Spl\SplArray;
 
+use WonderGame\CenterUtility\Common\Classes\CtxRequest;
 use WonderGame\CenterUtility\Common\Classes\LamJwt;
 use WonderGame\CenterUtility\Common\Classes\Mysqli;
 use WonderGame\CenterUtility\Common\Exception\HttpParamException;
