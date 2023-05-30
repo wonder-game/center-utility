@@ -381,7 +381,7 @@ if ( ! function_exists('verify_token')) {
     /**
      * 验证jwt并读取用户信息
      * @param array $header jwt所在的数组，传[]则自动从头信息中获取
-     * @param string|null $key 为string类型时会校验这个key值是否非空；为null时直接返回token
+     * @param string|null|bool $key 为string类型时会校验这个key值是否非空；为null或false或空时直接返回token
      * @param array $orgs 如果有传则会进行二次校验
      */
     function verify_token($header = [], $key = 'uid', $orgs = [])
@@ -391,7 +391,7 @@ if ( ! function_exists('verify_token')) {
         if ( ! $token = $header[config('ENCRYPT.jwtkey')][0] ?? '') {
             throw new HttpParamException('缺少token', Code::CODE_UNAUTHORIZED);
         }
-        if (is_null($key)) {
+        if ( ! $key) {
             return $token;
         }
         // 验证JWT
