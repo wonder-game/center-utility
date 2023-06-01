@@ -21,6 +21,20 @@ use WonderGame\EsNotify\EsNotify;
 use WonderGame\EsNotify\WeChat\Message\Notice;
 use WonderGame\EsNotify\WeChat\Message\Warning;
 
+if ( ! function_exists('sign')) {
+    /**
+     * 数据签名  md5(设备号 直接拼接 时间戳  直接拼接 # 直接拼接 签名key)，然后再转为全小写
+     * @param string $serial 设备号
+     * @param int $time 时间戳
+     * @return string
+     */
+    function sign($serial = '', $time = 0)
+    {
+        $key = config('ENCRYPT.sign');
+        return strtolower(md5("$serial$time#$key"));
+    }
+}
+
 
 if ( ! function_exists('is_super')) {
     /**
