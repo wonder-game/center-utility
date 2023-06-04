@@ -378,12 +378,12 @@ if ( ! function_exists('verify_token')) {
     {
         $token = $header[config('TOKEN_KEY')][0] ?? '';
         if ( ! $token) {
-            throw new HttpParamException('缺少token', Code::CODE_UNAUTHORIZED);
+            throw new HttpParamException('缺少token', Code::CODE_BAD_REQUEST);
         }
         // 验证JWT
         $jwt = LamJwt::verifyToken($token);
         if ($jwt['status'] != 1 || ! isset($jwt['data'][$key])) {
-            throw new HttpParamException('jwt有误', Code::CODE_BAD_REQUEST);
+            throw new HttpParamException('jwt有误', Code::CODE_UNAUTHORIZED);
         }
         // 二次校验
         if ($orgs && ( ! isset($orgs[$key]) || $jwt['data'][$key] != $orgs[$key])) {
