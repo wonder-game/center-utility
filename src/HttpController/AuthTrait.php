@@ -167,19 +167,19 @@ trait AuthTrait
 
         $this->sub = $jwt['data']['sub'];
         if ( ! in_array($this->sub, config('SUB_SYSTEM') ?: [])) {
-            $this->error(Code::ERROR_OTHER, Dictionary::CANT_FIND_USER);
+            $this->error(Code::CODE_UNAUTHORIZED, Dictionary::CANT_FIND_USER);
             return false;
         }
 
         // 当前用户信息
         $data = $this->_getEntityData($id);
         if (empty($data)) {
-            $this->error(Code::ERROR_OTHER, Dictionary::ADMIN_AUTHTRAIT_3);
+            $this->error(Code::CODE_UNAUTHORIZED, Dictionary::ADMIN_AUTHTRAIT_3);
             return false;
         }
 
         if (empty($data['status']) && ( ! is_super($data['rid']))) {
-            $this->error(Code::ERROR_OTHER, Dictionary::ADMIN_AUTHTRAIT_4);
+            $this->error(Code::CODE_UNAUTHORIZED, Dictionary::ADMIN_AUTHTRAIT_4);
             return false;
         }
 
